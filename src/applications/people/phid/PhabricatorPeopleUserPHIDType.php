@@ -41,6 +41,10 @@ final class PhabricatorPeopleUserPHIDType extends PhabricatorPHIDType {
       $realname = $user->getRealName();
       $username = $user->getUsername();
 
+      if (preg_match('/^[a-z]\d{3}[a-z]$/', $username) && strlen($realname)) {
+        $handle->setRealName($realname);
+      }
+
       $handle
         ->setName($username)
         ->setURI('/p/'.$username.'/')
