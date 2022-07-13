@@ -3,8 +3,25 @@
 final class PhabricatorRobotsPlatformController
   extends PhabricatorRobotsController {
 
-  protected function newRobotsRules() {
+  protected function disallowBots($names) {
     $out = array();
+
+    foreach ($names as $name) {
+      $out[] = 'User-agent: '.$name;
+      $out[] = 'Disallow: /';
+      $out[] = '';
+    }
+
+    return $out;
+  }
+
+  protected function newRobotsRules() {
+    $out = $this->disallowBots(array(
+      'AhrefsBot',
+      'dotbot',
+      'PetalBot',
+      'SemrushBot'
+    ));
 
     // Prevent indexing of '/diffusion/', since the content is not generally
     // useful to index, web spiders get stuck scraping the history of every
@@ -15,7 +32,7 @@ final class PhabricatorRobotsPlatformController
     // They're probably not hugely useful, but suffer fewer of the problems
     // Diffusion suffers and are hard to omit with 'robots.txt'.
 
-    $out[] = 'User-Agent: *';
+    $out[] = 'User-agent: *';
     $out[] = 'Disallow: /diffusion/';
     $out[] = 'Disallow: /source/';
 
