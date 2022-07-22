@@ -19,7 +19,11 @@ function disallowUnwantedBots() {
 }
 
 function isDKFZUser($user) {
-  $email_address = new PhutilEmailAddress($user->loadPrimaryEmailAddress());
-  $domain_name = phutil_utf8_strtolower($email_address->getDomainName());
-  return preg_match('/^dkfz(?:-heidelberg)?\.de$/', $domain_name) === 1;
+  try {
+    $email_address = new PhutilEmailAddress($user->loadPrimaryEmailAddress());
+    $domain_name = phutil_utf8_strtolower($email_address->getDomainName());
+    return preg_match('/^dkfz(?:-heidelberg)?\.de$/', $domain_name) === 1;
+  } catch (Exception $ex) {
+    return false;
+  }
 }
