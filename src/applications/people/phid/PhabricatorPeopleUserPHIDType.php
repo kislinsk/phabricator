@@ -40,6 +40,11 @@ final class PhabricatorPeopleUserPHIDType extends PhabricatorPHIDType {
       $user = $objects[$phid];
       $realname = $user->getRealName();
       $username = $user->getUsername();
+      $viewer = $query->getViewer();
+
+      if (isDKFZUser($viewer) && isDKFZUser($user) && strlen($realname)) {
+        $handle->setRealName($realname);
+      }
 
       $handle
         ->setName($username)

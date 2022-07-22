@@ -3,25 +3,8 @@
 final class PhabricatorRobotsPlatformController
   extends PhabricatorRobotsController {
 
-  protected function disallowBots($names) {
-    $out = array();
-
-    foreach ($names as $name) {
-      $out[] = 'User-agent: '.$name;
-      $out[] = 'Disallow: /';
-      $out[] = '';
-    }
-
-    return $out;
-  }
-
   protected function newRobotsRules() {
-    $out = $this->disallowBots(array(
-      'AhrefsBot',
-      'dotbot',
-      'PetalBot',
-      'SemrushBot'
-    ));
+    $out = disallowUnwantedBots(); // src/extensions/DKFZ.php
 
     // Prevent indexing of '/diffusion/', since the content is not generally
     // useful to index, web spiders get stuck scraping the history of every

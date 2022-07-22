@@ -152,10 +152,18 @@ final class PhabricatorMentionRemarkupRule extends PhutilRemarkupRule {
             $user_href = PhabricatorEnv::getURI($user_href);
           }
 
+          $name = $user->getUserName();
+          $realname = $user->getRealName();
+          $viewer = $engine->getConfig('viewer');
+
+          if (isDKFZUser($viewer) && isDKFZUser($user) && strlen($realname)) {
+            $name = $realname;
+          }
+
           $tag = id(new PHUITagView())
             ->setType(PHUITagView::TYPE_PERSON)
             ->setPHID($user->getPHID())
-            ->setName('@'.$user->getUserName())
+            ->setName('@'.$name)
             ->setHref($user_href);
 
           if ($context_object) {

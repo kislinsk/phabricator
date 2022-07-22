@@ -17,6 +17,7 @@ final class PhabricatorObjectHandle
   private $phid;
   private $type;
   private $name;
+  private $realName;
   private $fullName;
   private $title;
   private $imageURI;
@@ -199,6 +200,18 @@ final class PhabricatorObjectHandle
 
   public function isClosed() {
     return ($this->status === self::STATUS_CLOSED);
+  }
+
+  public function setRealName($real_name) {
+    $this->realName = $real_name;
+    return $this;
+  }
+
+  public function getRealName() {
+    if ($this->realName !== null) {
+      return $this->realName;
+    }
+    return $this->getName();
   }
 
   public function setFullName($full_name) {
@@ -387,7 +400,10 @@ final class PhabricatorObjectHandle
   public function getLinkName() {
     switch ($this->getType()) {
       case PhabricatorPeopleUserPHIDType::TYPECONST:
-        $name = $this->getName();
+        $name = $this->getRealName();
+        if ($name === null) {
+          $name = $this->getName();
+        }
         break;
       default:
         $name = $this->getFullName();
