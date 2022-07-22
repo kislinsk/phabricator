@@ -154,8 +154,9 @@ final class PhabricatorMentionRemarkupRule extends PhutilRemarkupRule {
 
           $name = $user->getUserName();
           $realname = $user->getRealName();
+          $viewer = $engine->getConfig('viewer');
 
-          if (preg_match('/^[a-z]\d{3}[a-z]$/', $name) && strlen($realname)) {
+          if (isDKFZUser($viewer) && isDKFZUser($user) && strlen($realname)) {
             $name = $realname;
           }
 
